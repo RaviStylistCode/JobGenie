@@ -1,0 +1,95 @@
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { apiserver } from "@/main";
+import { logout } from "@/redux/Actions/Useraction";
+import axios from "axios";
+import {
+  CirclePlus,
+  Home,
+  LogOut,
+  Settings,
+  SquareArrowLeft,
+  SquarePlus,
+} from "lucide-react";
+import React from "react";
+import toast from "react-hot-toast";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+
+const RecLeftSidebar = () => {
+  const navigate = useNavigate();
+
+  const dispatch=useDispatch();
+
+  const Logouthandler=async()=>{
+    try {
+      const res=await axios.get(`${apiserver}/users/logout`,{withCredentials:true});
+      if(res?.data?.success){
+        toast.success(res?.data?.message);
+        dispatch(logout());
+        navigate("/")
+
+      }
+      
+    } catch (error) {
+      toast.error(error?.response?.data?.message);
+    }
+  }
+
+  const sidebarhandler = (textType) => {
+    if (textType === "Home") navigate("/recruiter/main/home");
+    else if (textType === "Profile") navigate("/recruiter/main/home/profile");
+    else if (textType === "Create Company")
+      navigate("/recruiter/main/home/company");
+    else if (textType === "Create Jobs") navigate("/recruiter/main/home/job");
+    else if (textType==='Setting') navigate("/recruiter/main/home/settings")
+    else if (textType === "Back_to_app") navigate("/");
+    else if (textType === 'Logout') Logouthandler();
+          // alert(textType)
+  };
+
+  const sidebar = [
+    {
+      icon: <Home />,
+      text: "Home",
+    },
+    {
+      icon: <SquarePlus />,
+      text: "Create Company",
+    },
+    {
+      icon: <CirclePlus />,
+      text: "Create Jobs",
+    },
+    {
+      icon: (
+        <Avatar className="w-7 h-7">
+          <AvatarImage src="https://github.com/shadcn.png" alt="img" />
+          <AvatarFallback>CN</AvatarFallback>
+        </Avatar>
+      ),
+      text: "Profile",
+    },
+    { icon: <Settings />, text: "Setting" },
+    { icon: <LogOut />, text: "Logout" },
+    { icon: <SquareArrowLeft />, text: "Back_to_app" },
+  ];
+
+  return (
+    <div className="w-[20%] h-[100vh] rounded-md bg-[#C0C0C0] fixed ">
+      <div className="p-2  ">
+        {sidebar.map((item, index) => (
+          <div
+            key={index}
+            onClick={() => sidebarhandler(item.text)}
+            className="flex gap-5 my-3 cursor-pointer p-3 text-black rounded-md hover:bg-slate-300"
+          >
+            {item.icon}{" "}
+            <span className="hidden md:block font-semibold">{item.text}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default RecLeftSidebar;

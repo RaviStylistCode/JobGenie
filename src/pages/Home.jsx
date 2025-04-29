@@ -1,7 +1,7 @@
 import { Search } from "lucide-react";
 import React, { useState } from "react";
 import jobposter from "../assets/job.jpg";
-import CategoryCarousel from "@/carousels/categoryCarousel";
+import CategoryCarousel from "@/carousels/CategoryCarousel";
 import CompanyCard from "@/carousels/CompanyCard";
 import Header from "@/components/Header";
 import { Link } from "react-router-dom";
